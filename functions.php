@@ -308,14 +308,7 @@ function myoverride() {
   }
 }
 add_filter( 'revslider_meta_generator', '__return_empty_string');
-// Disable Dashicons in Front-end
-function wpdocs_dequeue_dashicon() {
-	if (current_user_can( 'update_core' )) {
-	    return;
-	}
-	wp_deregister_style('dashicons');
-}
-add_action( 'wp_enqueue_scripts', 'wpdocs_dequeue_dashicon' );
+
 // Disable XML-RPC
 add_filter('xmlrpc_enabled', '__return_false');
 function defer_parsing_of_js( $url ) {
@@ -325,11 +318,5 @@ function defer_parsing_of_js( $url ) {
     return str_replace( ' src', ' defer src', $url );
 }
 add_filter( 'script_loader_tag', 'defer_parsing_of_js', 10 );
-function defer_parsing_of_js( $url ) {
-    if ( is_user_logged_in() ) return $url; //don't break WP Admin
-    if ( FALSE === strpos( $url, '.js' ) ) return $url;
-    if ( strpos( $url, 'jquery.js' ) ) return $url;
-    return str_replace( ' src', ' defer src', $url );
-}
-add_filter( 'script_loader_tag', 'defer_parsing_of_js', 10 );
+
 add_action( 'wp_enqueue_scripts', 'child_manage_woocommerce_styles', 99 );
